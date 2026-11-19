@@ -51,6 +51,7 @@ def plot_histogram(readings, sensor_type):
     plt.xlabel(f"{sensor_type} reading")
     plt.ylabel("Number of readings")
     plt.grid(True)
+##################################################
 
 
 ################################################## save and load data
@@ -74,14 +75,19 @@ def load_readings(filename="sensor_readings.csv"):
 ##################################################
 
 
-################################################## user can't fill in a letter when a number is asked
-def ask_number(question):
+################################################## user can't fill in a letter when a number is asked, number can't be zero or negative
+def ask_number(question, minimum=None):
     while True:
         try:
-            return int(input(question))
+            value = int(input(question))
         except ValueError:
-            print("you seem to have filled in a letter when a number is ask, now that ain't so smart boy. you need to fill in a number if you want to continue, but before you do so you should askyourself the question: can I read?.")
-##################################################
+            print("Please enter a whole number.")
+            continue
+        if minimum is not None and value < minimum:
+            print(f"The value must be at least {minimum}.")
+            continue
+        return value
+
 
 ################################################## main program
 def main():
@@ -97,9 +103,13 @@ def main():
             print("No sensor_readings.csv found. Generate readings first.")
             return
     else:
-        minimum_value = ask_number("minimum value: ")
-        maximum_value = ask_number("maximum value: ")
-        number_of_samples = ask_number("number of samples: ")
+        while True:
+            minimum_value = ask_number("minimum value: ")
+            maximum_value = ask_number("maximum value: ")
+            if minimum_value < maximum_value:
+                break
+            print("The minimum value must be smaller than the maximum value.")
+        number_of_samples = ask_number("number of samples: ", minimum=1)
         readings = generate_readings(minimum_value, maximum_value, number_of_samples)
         save_readings(readings)
 
