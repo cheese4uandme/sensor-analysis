@@ -71,14 +71,24 @@ def load_readings(filename="sensor_readings.csv"):
         for row in reader:
             readings.append(int(row[1]))
     return readings
+##################################################
 
+
+################################################## user can't fill in a letter when a number is asked
+def ask_number(question):
+    while True:
+        try:
+            return int(input(question))
+        except ValueError:
+            print("you seem to have filled in a letter when a number is ask, now that ain't so smart boy. you need to fill in a number if you want to continue, but before you do so you should askyourself the question: can I read?.")
+##################################################
 
 ################################################## main program
 def main():
     choice = input("Generate new readings or load from CSV file? (generate/load): ").strip().lower()
 
     sensor_type = input("sensor type: ")
-    alert_threshold = int(input("alert threshold: "))
+    alert_threshold = ask_number("alert threshold: ")
 
     if choice == "load":
         try:
@@ -87,9 +97,9 @@ def main():
             print("No sensor_readings.csv found. Generate readings first.")
             return
     else:
-        minimum_value = int(input("minimum value: "))
-        maximum_value = int(input("maximum value: "))
-        number_of_samples = int(input("number of samples: "))
+        minimum_value = ask_number("minimum value: ")
+        maximum_value = ask_number("maximum value: ")
+        number_of_samples = ask_number("number of samples: ")
         readings = generate_readings(minimum_value, maximum_value, number_of_samples)
         save_readings(readings)
 
@@ -112,4 +122,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
+##################################################
