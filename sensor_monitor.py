@@ -56,12 +56,15 @@ def plot_histogram(readings, sensor_type):
 
 ################################################## save and load data
 def save_readings(readings, filename="sensor_readings.csv"):
-    with open(filename, "w", newline="") as file:
-        writer = csv.writer(file)
-        writer.writerow(["sample_number", "sensor_reading"])
-        for sample_number, reading in enumerate(readings, start=1):
-            writer.writerow([sample_number, reading])
-    print(f"Readings saved to {os.path.abspath(filename)}")
+    try:
+        with open(filename, "w", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerow(["sample_number", "sensor_reading"])
+            for sample_number, reading in enumerate(readings, start=1):
+                writer.writerow([sample_number, reading])
+        print(f"Readings saved to {os.path.abspath(filename)}")
+    except OSError as error:
+        print(f"Could not save the CSV file: {error}")
 
 
 def load_readings(filename="sensor_readings.csv"):
